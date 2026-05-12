@@ -64,11 +64,12 @@ def search_saramin(keyword, pages):
 
         for li in lis:
             company = li.find("strong", class_="corp_name").text.strip()
-            title_link = li.select_one("h2.job_tit > a")
-            title = title_link.get_text(strip=True) if title_link else ""
-            link = "https://www.saramin.co.kr" + title_link.get("href") if title_link else ""
-            location = " ".join([a.get_text(strip=True) for a in li.select("div.job_condition span a")])
-
+            title_tag = li.find("h2", class_="job_tit").find("a")
+            title = title_tag.text.strip()
+            link = title_tag.get("href")
+            location_tags = li.find("div", class_="job_condition").find_all("a")
+            location = location_tags[0].text.strip() + " " + location_tags[1].text.strip()
+        
             job_data = {
                 "company": company,
                 "title": title,
@@ -77,6 +78,7 @@ def search_saramin(keyword, pages):
             }
             jobs.append(job_data)
     return jobs
+
 
 
 

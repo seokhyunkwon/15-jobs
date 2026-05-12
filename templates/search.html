@@ -24,7 +24,13 @@
           </tr>
         </thead>
         <tbody>
-          {% for i, job in jobs %} {% if i == incruit_count %}
+          <tr>
+            <td colspan="5" style="text-align: center; font-weight: bold">
+              인크루트 검색결과
+            </td>
+          </tr>
+          {% for i, job in jobs %}
+          {% if i == incruit_count %}
           <tr>
             <td colspan="5" style="text-align: center; font-weight: bold">
               사람인 검색결과
