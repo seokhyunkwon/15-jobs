@@ -20,12 +20,18 @@
             <th>Co</th>
             <th>Title</th>
             <th>Loc</th>
+            <th>Source</th>
           </tr>
         </thead>
         <tbody>
-          {% for i, job in jobs %}
+          {% for i, job in jobs %} {% if i == incruit_count %}
           <tr>
-            <!-- <td>{{ loop.index }}</td> -->
+            <td colspan="5" style="text-align: center; font-weight: bold">
+              사람인 검색결과
+            </td>
+          </tr>
+          {% endif %}
+          <tr>
             <td>{{ i+1 }}</td>
             <td>{{ job['company'] }}</td>
             <td>
@@ -34,6 +40,7 @@
               </a>
             </td>
             <td>{{ job['location'] }}</td>
+            <td>{{ job['source'] }}</td>
           </tr>
           {% endfor %}
         </tbody>

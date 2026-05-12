@@ -12,14 +12,26 @@ def search():
     keyword = request.args.get('keyword')
     incruit_jobs = search_incruit(keyword, 1)
     saramin_jobs = search_saramin(keyword, 1)
+
+    for job in incruit_jobs:
+        job["source"] = "인크루트"
+    for job in saramin_jobs:
+        job["source"] = "사람인"
+
     all_jobs = incruit_jobs + saramin_jobs
-    return render_template('search.html', jobs=enumerate(all_jobs), keyword=keyword)
+    return render_template('search.html', jobs=enumerate(all_jobs), keyword=keyword, incruit_count=len(incruit_jobs))
 
 @app.route("/file")
 def file():
     keyword = request.args.get('keyword')
     incruit_jobs = search_incruit(keyword, 1)
     saramin_jobs = search_saramin(keyword, 1)
+
+    for job in incruit_jobs:
+        job["source"] = "인크루트"
+    for job in saramin_jobs:
+        job["source"] = "사람인"
+
     all_jobs = incruit_jobs + saramin_jobs
     save_to_csv(all_jobs)
     

@@ -51,7 +51,7 @@ def search_incruit(keyword, pages):
 
 
 def search_saramin(keyword, pages):
-    jobs_s = []
+    jobs = []
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
@@ -61,55 +61,22 @@ def search_saramin(keyword, pages):
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, "html.parser")
         lis = soup.find_all("div", class_="item_recruit")
-    
+
         for li in lis:
-            # Extract title and link
-            title_link = li.find("a", class_="data_layer")
-            if title_link:
-                title = title_link.get_text().strip()
-                link = "https://www.saramin.co.kr" + title_link.get("href")
-            else:
-                continue
-            
-            # Extract company and location from text
-            text = li.get_text()
-            
-            # Company - look for company name patterns
-            company = ""
-            # Try to find company name in the text
-            lines = [line.strip() for line in text.split('\n') if line.strip() and len(line) > 1]
-            for line in lines:
-                # Skip lines that are clearly not company names
-                if any(skip in line for skip in ['스크랩', '입사지원', '오늘마감', '만원', '외', '수정일', '공고 모아보기', '기업정보', '관심기업']):
-                    continue
-                # Look for company-like patterns
-                if ('(' in line and ')' in line) or len(line) > 3:
-                    company = line
-                    break
-            
-            # If still no company, try the last meaningful line
-            if not company:
-                for line in reversed(lines):
-                    if len(line) > 2 and not any(char.isdigit() for char in line):
-                        company = line
-                        break
-            
-            # Location - look for common city names
-            location = ""
-            cities = ["서울", "부산", "대구", "인천", "광주", "대전", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"]
-            for city in cities:
-                if city in text:
-                    location = city
-                    break
-            
+            company = li.find("strong", class_="corp_name").text.strip()
+            title_link = li.select_one("h2.job_tit > a")
+            title = title_link.get_text(strip=True) if title_link else ""
+            link = "https://www.saramin.co.kr" + title_link.get("href") if title_link else ""
+            location = " ".join([a.get_text(strip=True) for a in li.select("div.job_condition span a")])
+
             job_data = {
                 "company": company,
                 "title": title,
                 "location": location,
                 "link": link
             }
-            jobs_s.append(job_data)
-    return jobs_s
+            jobs.append(job_data)
+    return jobs
 
 
 
@@ -120,11 +87,6 @@ def search_saramin(keyword, pages):
 # response = requests.get(url)
 # print(response.status_code)
 # print(response.text)    
-    
-    
-    
-    
-    
 
 
 
