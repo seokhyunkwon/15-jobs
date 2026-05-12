@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>검색결과</h1>
+      <p>인크루트, 잡코리아에서 검색한 결과입니다.</p>
+      <a href="/file?keyword={{ request.args.get('keyword') }}">
+        <button>csv 다운로드</button>
+      </a>
+      <p>&nbsp;</p>
+      <table class="striped">
+        <thead data-theme="light">
+          <tr>
+            <th>No</th>
+            <th>Co</th>
+            <th>Title</th>
+            <th>Loc</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i, job in jobs %}
+          <tr>
+            <!-- <td>{{ loop.index }}</td> -->
+            <td>{{ i+1 }}</td>
+            <td>{{ job['company'] }}</td>
+            <td>
+              <a target="_blank" href="{{ job['link'] }}"
+                >{{ job['title'] }}
+              </a>
+            </td>
+            <td>{{ job['location'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
